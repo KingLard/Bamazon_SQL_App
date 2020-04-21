@@ -1,4 +1,5 @@
 var mysql = require("mysql");
+var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -12,8 +13,8 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId);
     afterConnection();
+    
 });
 
 function afterConnection() {
@@ -22,7 +23,28 @@ function afterConnection() {
         for(i = 0; i < res.length; i++) {
             console.log(res[i].item_id + "    " + res[i].product_name + "        " + res[i].price + "\n");
         }
-        
+        startApp();
         connection.end()
     })
+}
+
+function startApp() {
+    inquirer.prompt([
+
+        {
+          type: "input",
+          name: "ProductChoice",
+          message: "Choose a product (please enter ID number)"
+        },
+
+        {
+            type: "input",
+            name: "Quantity",
+            message: "How many would you like?"
+          },
+          ]).then(function(user) { 
+              console.log(user.ProductChoice);
+              console.log(user.Quantity);
+          })
+        
 }
