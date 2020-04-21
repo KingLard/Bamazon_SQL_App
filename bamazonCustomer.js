@@ -27,6 +27,10 @@ function afterConnection() {
     })
 }
 
+function updateInventory(id) {
+connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: newQuantity},{item_id : id}])
+}
+
 function startApp() {
     inquirer.prompt([
 
@@ -62,6 +66,7 @@ function startApp() {
                 var total = price * quantity;
                 console.log(itemName + " x " + quantity);
                 console.log("Your total is " + total);
+                newQuantity = stockCount - quantity;
 
                 inquirer.prompt([
                 {
@@ -72,15 +77,29 @@ function startApp() {
                   },
 
                 ]).then(function(response) {
-                    if (response.totalConfirm == "Yes") {
-                        console.log("thanks for your order!")
+                    if (response.totalConfirm == "No") {
+                        console.log("try ordering again!")
+                        
                     } else {
-                        console.log("try ordering again");
+
+
+                        console.log("thanks for your order!")
+                        connection.query("UPDATE products SET ? WHERE ?", [
+                            {stock_quantity: newQuantity},{item_id: userChoice}
+                        ], function(err, res) {
+                            console.log(res.affectedRows);
+                            connection.end();
+                           
+                        }
+                        )
+
+
+
                     }
                 })
 
                
-                connection.end();
+                
               }
               
               
