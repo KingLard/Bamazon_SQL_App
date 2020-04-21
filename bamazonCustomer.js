@@ -24,7 +24,6 @@ function afterConnection() {
             console.log(res[i].item_id + "    " + res[i].product_name + "        " + res[i].price + "\n");
         }
         startApp();
-        connection.end()
     })
 }
 
@@ -43,8 +42,20 @@ function startApp() {
             message: "How many would you like?"
           },
           ]).then(function(user) { 
-              console.log(user.ProductChoice);
-              console.log(user.Quantity);
+              var userChoice = user.ProductChoice;
+              var quantity = user.Quantity;
+
+              connection.query("SELECT * FROM products WHERE item_id = " + userChoice, function(err, res) {
+              if (err) throw err;
+              console.log(res);
+              var stockCount = res[0].stock_quantity;
+              
+              connection.end();
+              
+
+
+            
           })
         
+        })
 }
