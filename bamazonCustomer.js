@@ -62,6 +62,24 @@ function startApp() {
                 var total = price * quantity;
                 console.log(itemName + " x " + quantity);
                 console.log("Your total is " + total);
+
+                inquirer.prompt([
+                {
+                  type: "list",
+                  name: "totalConfirm",
+                  message: "Is this total correct?",
+                  choices: ["Yes", "No"]
+                  },
+
+                ]).then(function(response) {
+                    if (response.totalConfirm == "Yes") {
+                        console.log("thanks for your order!")
+                    } else {
+                        console.log("try ordering again");
+                    }
+                })
+
+               
                 connection.end();
               }
               
