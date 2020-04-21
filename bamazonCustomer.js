@@ -49,8 +49,22 @@ function startApp() {
               if (err) throw err;
               console.log(res);
               var stockCount = res[0].stock_quantity;
+              var price = res[0].price;
+              var itemName = res[0].product_name;
               
-              connection.end();
+              
+              
+
+              if (stockCount < quantity) {
+                  console.log("Insufficient Quantity")
+                  connection.end();
+              } else {
+                var total = price * quantity;
+                console.log(itemName + " x " + quantity);
+                console.log("Your total is " + total);
+                connection.end();
+              }
+              
               
 
 
